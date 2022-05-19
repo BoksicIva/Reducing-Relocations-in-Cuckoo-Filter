@@ -17,4 +17,4 @@ http://www.cs.cmu.edu/%7Ebinfan/papers/conext14_cuckoofilter.pdf
 
 
 • napraviti vlastiti CF i CF s reduciranim brojem premještanja te ih usporediti međusobno i s
-originalnom CF implementacijom
+originalnom CF implementacijom (https://github.com/efficient/cuckoofilter)
