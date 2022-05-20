@@ -1,0 +1,1 @@
+void sha1_example();

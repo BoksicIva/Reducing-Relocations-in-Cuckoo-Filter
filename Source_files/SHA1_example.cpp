@@ -1,9 +1,10 @@
 #include <iostream>
 #include <openssl/sha.h>
+#include "../Header_files/SHA1_example.h"
 
 using namespace std;
 
-int main() {
+void sha1_example() {
     // prepare parameters for calculating hash
     const unsigned char* to_hash = reinterpret_cast<const unsigned char*>("ACTGGGTCCAA");
     size_t length = strlen((char*)to_hash);
@@ -36,6 +37,4 @@ int main() {
         printf("%02x ", results_different[i]);
     }
     printf("\n");
-
-    return 0;
 }
