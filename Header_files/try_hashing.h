@@ -1,0 +1,1 @@
+void try_hashing(int k);
