@@ -61,19 +61,19 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		if (!full_bucket(bucket1,b) && !full_bucket(bucket1,b)) {
 
 			if (count1 <= count2) {
-				insert_in_slot(bucket1, h1_x);
+				insert_in_slot(bucket1, Ex);
 			}
 			else {
-				insert_in_slot(bucket2, h2_x);
+				insert_in_slot(bucket2, Ex);
 			}
 
 		}
 		else if (!full_bucket(bucket1, b) || !full_bucket(bucket1, b)) {
 			if (!full_bucket(bucket1, b)) {
-				insert_in_slot(bucket1, h1_x);
+				insert_in_slot(bucket1, Ex);
 			}
 			else {
-				insert_in_slot(bucket2, h2_x);
+				insert_in_slot(bucket2, Ex);
 			}
 		}
 		else {
@@ -93,7 +93,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 				int position = (r ^ Er) % b;
 				to_bucket = CuckooTable[position];
 				if (!full_bucket(to_bucket, b)) {
-					insert_in_slot(to_bucket, h1_x);
+					insert_in_slot(to_bucket, Er);
 					return true;
 				}
 				Ex = Er;
@@ -115,9 +115,31 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 }
 
 
-//bool get(unsigned char* segment) {
+bool search(vector<vector<uint32_t>>& CuckooTable,const char* genom) {
+	hashes_struct hashes = get_hashes(genom);
+	uint32_t Ex = hashes.fingerprint;
+	uint32_t h1_x = hashes.h1;
+	uint32_t h2_x = hashes.h2;
 
-//}
+	int position1 = h1_x % CuckooTable.size();
+	int position2 = h2_x % CuckooTable.size();
+	vector<uint32_t>& bucket1 = CuckooTable[position1];
+	vector<uint32_t>& bucket2 = CuckooTable[position2];
+
+	for (uint32_t fp : bucket1) {
+		if (fp == Ex)
+			return true;
+	}
+
+	for (uint32_t fp : bucket2) {
+		if (fp == Ex)
+			return true;
+	}
+
+	return false;
+
+
+}
 
 
 bool duplicateFilters(vector<uint32_t>& bucket1, vector<uint32_t>& bucket2,uint32_t Ex) {
@@ -139,8 +161,8 @@ int fingerCount(vector<uint32_t>& bucket) {
 	return (int)bucket.size();
 }
 
-void insert_in_slot(vector<uint32_t>& bucket, uint32_t h) {
-	bucket.insert(bucket.begin() + bucket.size(), h);
+void insert_in_slot(vector<uint32_t>& bucket, uint32_t fp) {
+	bucket.insert(bucket.begin() + bucket.size(), fp);
 }
 
 uint32_t kick_from_slot(vector<uint32_t>& bucket, uint32_t Ex) {

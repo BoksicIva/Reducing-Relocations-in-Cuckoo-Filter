@@ -23,16 +23,19 @@ int main() {
 	string genom;
 	ifstream genom_file("Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genom.fna");
 	vector<vector<uint32_t>> CuckooTable = createCuckooTable(10);
+	string a="";
 	int counter = 10;
 	if (genom_file) {
 		while (getline(genom_file, genom)) {
 			whole_genom += genom;
 			bool inserted = insert(10, 4, CuckooTable, genom.c_str(), 5);
-			cout << inserted;
+			cout << inserted<<endl;
 			counter--;
+			a = genom;
 			if (counter == 0)
 				break;
 		}
+		cout <<"Search:"<< search(CuckooTable, a.c_str());
 	}
 	else {
 		cout << "Failed to open file!" << endl;
