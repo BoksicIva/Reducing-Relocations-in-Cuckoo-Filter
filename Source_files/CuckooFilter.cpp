@@ -16,8 +16,8 @@ using namespace std;
 /// <param name="m">The number of buckets in the Cuckoo filter </param>
 /// <param name="b"> the number of entries in each bucket </param>
 /// <returns>Function returns pointer to CuckooTable of type vector of vector of uint32_t type</returns>
-vector<vector<uint32_t>> createCuckooTable(int m, int b) {
-	vector<vector<uint32_t>> CuckooTable(m, vector<uint32_t>(b));
+vector<vector<uint32_t>> createCuckooTable(int m) {
+	vector<vector<uint32_t>> CuckooTable(m);		
 	return CuckooTable;
 }
 
@@ -46,13 +46,12 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 	uint32_t Ex = hashes.fingerprint;
 	uint32_t h1_x = hashes.h1;
 	uint32_t h2_x = hashes.h2;
-	vector<uint32_t> bucket1;
-	vector<uint32_t> bucket2;
+
 
 	int position1 = h1_x % CuckooTable.size();
 	int position2 = h2_x % CuckooTable.size();
-	bucket1 = CuckooTable[position1];
-	bucket2 = CuckooTable[position2];
+	vector<uint32_t>& bucket1 = CuckooTable[position1];
+	vector<uint32_t>& bucket2 = CuckooTable[position2];
 
 	if (!duplicateFilters(bucket1, bucket2, Ex)) {
 		int count1 = fingerCount(CuckooTable[position1]);
@@ -69,26 +68,41 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 			}
 
 		}
-		else {
-			// relocation process
-			int r = rand() % 2;
-			if (r == 1) {
-				uint32_t Er = kick_from_slot(bucket1, Ex);
+		else if (!full_bucket(bucket1, b) || !full_bucket(bucket1, b)) {
+			if (!full_bucket(bucket1, b)) {
+				insert_in_slot(bucket1, h1_x);
 			}
 			else {
-				uint32_t Er = kick_from_slot(bucket2, Ex);
+				insert_in_slot(bucket2, h2_x);
 			}
+		}
+		else {
+			// relocation process
+			int random = rand() % 2;
+			uint32_t r = h2_x;
+			uint32_t Er;
+			vector<uint32_t> kick_from_bucket = bucket2, to_bucket;
+			if (random == 1) {
+				r = h1_x;
+				kick_from_bucket = bucket1;
+			}
+
+			
 			for (int n = 0; n < MNK; n++) {
-				int r;
-				bucket1 = CuckooTable[r];
-				if (!full_bucket(bucket1, b)) {
-					insert_in_slot(bucket1, h1_x);
+				Er = kick_from_slot(kick_from_bucket, Ex);
+				int position = (r ^ Er) % b;
+				to_bucket = CuckooTable[position];
+				if (!full_bucket(to_bucket, b)) {
+					insert_in_slot(to_bucket, h1_x);
 					return true;
 				}
+				Ex = Er;
+				kick_from_bucket = to_bucket;
 			}
 			return false;
 		}
 	}
+	vector<uint32_t> bucket444 = CuckooTable[1];
 	return true;
 	    /// .The victim calculates its alternative
 		///		  bucket, and tries to relocate itself to the 
@@ -98,17 +112,15 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		///		  continues until the kicked out fingerprint finds an available 
 		///       alternative bucket or the number of relocation reaches the 
 		///       predefined maximum number, denoted as MNK.
-
 }
 
 
-bool get(unsigned char* segment) {
+//bool get(unsigned char* segment) {
 
-}
+//}
 
 
 bool duplicateFilters(vector<uint32_t>& bucket1, vector<uint32_t>& bucket2,uint32_t Ex) {
-	bool b1, b2;
 
 	for (uint32_t fp : bucket1) {
 		if (fp == Ex)
@@ -124,7 +136,7 @@ bool duplicateFilters(vector<uint32_t>& bucket1, vector<uint32_t>& bucket2,uint3
 }
 
 int fingerCount(vector<uint32_t>& bucket) {
-	return bucket.size();
+	return (int)bucket.size();
 }
 
 void insert_in_slot(vector<uint32_t>& bucket, uint32_t h) {
