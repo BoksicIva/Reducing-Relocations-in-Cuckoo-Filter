@@ -46,7 +46,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 	uint32_t Ex = hashes.fingerprint;
 	uint32_t h1_x = hashes.h1;
 	uint32_t h2_x = hashes.h2;
-
+	srand(time(0));
 	int random;
 
 
@@ -61,7 +61,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 
 		
 		
-		if (!full_bucket(bucket1,b) && !full_bucket(bucket1,b)) {
+		if (!full_bucket(bucket1,b) && !full_bucket(bucket2,b)) {
 			num_insertions++;
 
 			if (reduced) {
@@ -74,6 +74,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 			}
 			else {
 				random = rand() % 2;
+				//cout << "Random 0,1" << random;
 				vector<uint32_t> to_bucket = bucket2;
 				if (random == 1) {
 					to_bucket = bucket1;
@@ -82,7 +83,9 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 			}
 
 		}
-		else if (!full_bucket(bucket1, b) || !full_bucket(bucket1, b)) {
+		else if (!full_bucket(bucket1, b) || !full_bucket(bucket2, b)) {
+			num_insertions++;
+
 			if (!full_bucket(bucket1, b)) {
 				insert_in_slot(bucket1, Ex);
 			}
@@ -93,6 +96,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		else {
 			// relocation process
 			random = rand() % 2;
+			//cout << "Random2: 0,1" << random;
 			uint32_t r = h2_x;
 			uint32_t Er;
 			vector<uint32_t> kick_from_bucket = bucket2, to_bucket;
@@ -105,7 +109,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 			for (int n = 0; n < MNK; n++) {
 				num_reloc++;
 				Er = kick_from_slot(kick_from_bucket, Ex);
-				int position = (r ^ Er) % b;
+				int position = (r ^ Er) % CuckooTable.size();
 				to_bucket = CuckooTable[position];
 				if (!full_bucket(to_bucket, b)) {
 					num_insertions++;
@@ -182,6 +186,7 @@ void insert_in_slot(vector<uint32_t>& bucket, uint32_t fp) {
 
 uint32_t kick_from_slot(vector<uint32_t>& bucket, uint32_t Ex) {
 	int r = rand() % bucket.size();
+	//cout << "kick_from_slot"<< r;
 	uint32_t Er = bucket[r];
 	bucket[r] = Ex;
 	return Er;

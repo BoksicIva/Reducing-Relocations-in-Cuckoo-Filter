@@ -29,7 +29,7 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	// total number of relocations of cuckoo filtering
 	int num_reloc = 0;
 
-	for (int i = 0; i < whole_genome.length(); i++) {
+	for (int i = 0; i < whole_genome.length()-k; i++) {
 		// take k-mers of size k
 		string k_mer = whole_genome.substr(i, k);
 		num_k_mers++;
@@ -71,6 +71,7 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, vector<vector<uint32_t>> CuckooTable) {
 	// read genome
 	string whole_genome = ReadGenome(filename);
+	srand(time(0));
 
 	// number of found k-mers
 	int num_found = 0;
@@ -79,6 +80,7 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 	for (int i = 0; i < num_of_random_k_mers; i++) {
 		// pick a random k_mer
 		int random = rand() % (whole_genome.length() - k + 1);
+	
 		string k_mer = whole_genome.substr(random, k);
 		bool found = search(CuckooTable, k_mer.c_str());
 

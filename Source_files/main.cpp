@@ -7,10 +7,10 @@ using namespace std;
 
 int main() {
 	int k = 100;
-	int rows = 50000;
+	int rows = 5000;
 	int columns = 100;
 	int mnk = 100;
-	int num_of_random_k_mers = 10000;
+	int num_of_random_k_mers =5000000;
 	bool reduced = true;
 	string filename = "Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genome.fna";
 
