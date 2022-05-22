@@ -41,11 +41,13 @@ vector<vector<uint32_t>> createCuckooTable(int m) {
 /// /// <param name="CuckooTable">Representation of Cuckoo Table </param>
 /// <param name="genome">Text segment that needs to be stored into Cuckoo Table</param>
 /// <returns>Boolean value if text segment s successfuly stored</returns>
-bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* genome,int MNK) {
+bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* genome,int MNK, bool reduced) {
 	hashes_struct hashes = get_hashes(genome);
 	uint32_t Ex = hashes.fingerprint;
 	uint32_t h1_x = hashes.h1;
 	uint32_t h2_x = hashes.h2;
+
+	int random;
 
 
 	int position1 = h1_x % CuckooTable.size();
@@ -60,11 +62,21 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		
 		if (!full_bucket(bucket1,b) && !full_bucket(bucket1,b)) {
 
-			if (count1 <= count2) {
-				insert_in_slot(bucket1, Ex);
+			if (reduced) {
+				if (count1 <= count2) {
+					insert_in_slot(bucket1, Ex);
+				}
+				else {
+					insert_in_slot(bucket2, Ex);
+				}
 			}
 			else {
-				insert_in_slot(bucket2, Ex);
+				random = rand() % 2;
+				vector<uint32_t> to_bucket = bucket2;
+				if (random == 1) {
+					to_bucket = bucket1;
+				}
+				insert_in_slot(to_bucket, Ex);
 			}
 
 		}
@@ -78,7 +90,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		}
 		else {
 			// relocation process
-			int random = rand() % 2;
+			random = rand() % 2;
 			uint32_t r = h2_x;
 			uint32_t Er;
 			vector<uint32_t> kick_from_bucket = bucket2, to_bucket;

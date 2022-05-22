@@ -8,7 +8,7 @@ using namespace std;
 
 vector<vector<uint32_t>> createCuckooTable(int m);
 
-bool insert(int m, int b, vector<vector<uint32_t>>& CuckooTable, const char* genom, int MNK);
+bool insert(int m, int b, vector<vector<uint32_t>>& CuckooTable, const char* genom, int MNK,bool reduced);
 
 bool search(vector<vector<uint32_t>>& CuckooTable, const char* genom);
 

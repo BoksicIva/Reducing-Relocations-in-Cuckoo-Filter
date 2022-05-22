@@ -12,7 +12,7 @@
 using namespace std;
 using namespace std::chrono;
 
-vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk) {
+vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk,bool reduced) {
 	// read genome
 	string whole_genome = ReadGenome(filename);
 
@@ -33,7 +33,7 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 
 		// insert into cuckoo table
 		auto start = high_resolution_clock::now();
-		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk);
+		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk, reduced);
 		auto stop = high_resolution_clock::now();
 		auto insertion_time = duration_cast<microseconds>(stop - start).count();
 
@@ -90,9 +90,9 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 	cout << (num_found / num_of_random_k_mers) * 100 << "% of random k_mers were found." << endl;
 }
 
-void implementation(string filename, int k, int rows, int columns, int mnk, int num_of_random_k_mers) {
+void implementation(string filename, int k, int rows, int columns, int mnk, int num_of_random_k_mers,bool reduced) {
 	// build the cuckoo table
-	vector<vector<uint32_t>> CuckooTable = build_cuckoo_table(k, filename, rows, columns, mnk);
+	vector<vector<uint32_t>> CuckooTable = build_cuckoo_table(k, filename, rows, columns, mnk, reduced);
 
 	// search
 	search_for_random_k_mers(k, num_of_random_k_mers, filename, CuckooTable);
