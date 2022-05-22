@@ -26,6 +26,9 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	// insertion time vector
 	vector<long long> insertion_time_vector;
 
+	// total number of relocations of cuckoo filtering
+	int num_reloc = 0;
+
 	for (int i = 0; i < whole_genome.length(); i++) {
 		// take k-mers of size k
 		string k_mer = whole_genome.substr(i, k);
@@ -33,20 +36,17 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 
 		// insert into cuckoo table
 		auto start = high_resolution_clock::now();
-		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk, reduced);
+		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk, reduced,num_reloc,num_insertions);
 		auto stop = high_resolution_clock::now();
 		auto insertion_time = duration_cast<microseconds>(stop - start).count();
 
 		insertion_time_vector.push_back(insertion_time);
 
-		if (inserted) {
-			num_insertions++;
-		}
 	}
 
 	cout << "Number of k-mers of size " << k  << ": " << num_k_mers << endl;
 	cout << "Number of inserted k-mers:   " << num_insertions << endl;
-	cout << (num_insertions / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
+	cout << (num_insertions*1.0 / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
 
 	// average insertion time
 	float average_insertion_time = 0.0;
@@ -59,8 +59,11 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	cout << "Average insertion time: " << average_insertion_time << " ms" << endl;
 
 	// load factor
-	float load_factor = float(num_insertions) / (rows * columns);
+	float load_factor = (num_insertions*1.0) / (rows * columns);
 	cout << "Load factor: " << load_factor << endl;
+
+	// Number of relocations
+	cout << "Number of relocations: " << num_reloc << endl;
 
 	return CuckooTable;
 }
