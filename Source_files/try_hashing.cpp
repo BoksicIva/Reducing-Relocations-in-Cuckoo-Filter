@@ -7,14 +7,14 @@
 using namespace std;
 
 void try_hashing(int k) {
-	// read genom
-	string whole_genom;
-	string genom;
-	ifstream genom_file("Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genom.fna");
+	// read genome
+	string whole_genome;
+	string genome;
+	ifstream genome_file("Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genome.fna");
 
-	if (genom_file) {
-		while (getline(genom_file, genom)) {
-			whole_genom += genom;
+	if (genome_file) {
+		while (getline(genome_file, genome)) {
+			whole_genome += genome;
 		}
 	}
 	else {
@@ -22,11 +22,11 @@ void try_hashing(int k) {
 		return;
 	}
 
-	genom_file.close();
+	genome_file.close();
 
 	// take k-mers of size k and calculate their h1, fingeprint and h2
-	for (int i = 0; i < whole_genom.length(); i++) {
-		string k_mer = whole_genom.substr(i, k);
+	for (int i = 0; i < whole_genome.length(); i++) {
+		string k_mer = whole_genome.substr(i, k);
 
 		hashes_struct hashes = get_hashes(k_mer.c_str());
 

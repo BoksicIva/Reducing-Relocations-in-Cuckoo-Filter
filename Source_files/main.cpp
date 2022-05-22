@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "../Header_files/SHA1_example.h"
-#include "../Header_files/GENOM_example.h"
+#include "../Header_files/ReadGenome.h"
 #include "../Header_files/hashing.h"
 #include "../Header_files/try_hashing.h"
 #include "../Header_files/CuckooFilter.h"
@@ -13,25 +13,25 @@ using namespace std;
 int main() {
 	//sha1_example();
 	
-	//GENOM_example();
+	//string genome = ReadGenome("Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genome.fna");
 
 	//int k = 10;
 	//try_hashing(k);
-	// read genom
+	// read genome
 
-	string whole_genom;
-	string genom;
-	ifstream genom_file("Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genom.fna");
+	string whole_genome;
+	string genome;
+	ifstream genome_file("Reducing-Relocations-in-Cuckoo-Filter/Resource_files/genome.fna");
 	vector<vector<uint32_t>> CuckooTable = createCuckooTable(10);
 	string a="";
 	int counter = 10;
-	if (genom_file) {
-		while (getline(genom_file, genom)) {
-			whole_genom += genom;
-			bool inserted = insert(10, 4, CuckooTable, genom.c_str(), 5);
+	if (genome_file) {
+		while (getline(genome_file, genome)) {
+			whole_genome += genome;
+			bool inserted = insert(10, 4, CuckooTable, genome.c_str(), 5);
 			cout << inserted<<endl;
 			counter--;
-			a = genom;
+			a = genome;
 			if (counter == 0)
 				break;
 		}
@@ -42,7 +42,7 @@ int main() {
 		return -1;
 	}
 
-	genom_file.close();
+	genome_file.close();
 
 
 	return 0;

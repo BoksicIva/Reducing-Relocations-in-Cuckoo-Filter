@@ -14,6 +14,7 @@ void sha1_example() {
     SHA1(to_hash, length, results);
 
     // print hash
+    cout << "ACTGGGTCCAA" << " ";
     for (int i = 0; i < 20; i++) {
         printf("%02x ", results[i]);
     }
@@ -28,11 +29,13 @@ void sha1_example() {
     unsigned char* results_different = new unsigned char[SHA_DIGEST_LENGTH];
     SHA1(different_hash, length, results_different);
 
+    cout << "ACTGGGTCCAA" << " ";
     for (int i = 0; i < 20; i++) {
         printf("%02x ", results_same[i]);
     }
     printf("\n");
 
+    cout << "TTCGAA" << "      ";
     for (int i = 0; i < 20; i++) {
         printf("%02x ", results_different[i]);
     }

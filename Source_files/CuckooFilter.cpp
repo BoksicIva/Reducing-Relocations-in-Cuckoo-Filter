@@ -39,10 +39,10 @@ vector<vector<uint32_t>> createCuckooTable(int m) {
 /// By: Iva Bokšić
 /// </summary>
 /// /// <param name="CuckooTable">Representation of Cuckoo Table </param>
-/// <param name="genom">Text segment that needs to be stored into Cuckoo Table</param>
+/// <param name="genome">Text segment that needs to be stored into Cuckoo Table</param>
 /// <returns>Boolean value if text segment s successfuly stored</returns>
-bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* genom,int MNK) {
-	hashes_struct hashes = get_hashes(genom);
+bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* genome,int MNK) {
+	hashes_struct hashes = get_hashes(genome);
 	uint32_t Ex = hashes.fingerprint;
 	uint32_t h1_x = hashes.h1;
 	uint32_t h2_x = hashes.h2;
@@ -115,8 +115,8 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 }
 
 
-bool search(vector<vector<uint32_t>>& CuckooTable,const char* genom) {
-	hashes_struct hashes = get_hashes(genom);
+bool search(vector<vector<uint32_t>>& CuckooTable,const char* genome) {
+	hashes_struct hashes = get_hashes(genome);
 	uint32_t Ex = hashes.fingerprint;
 	uint32_t h1_x = hashes.h1;
 	uint32_t h2_x = hashes.h2;

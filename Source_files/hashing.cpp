@@ -7,9 +7,9 @@
 
 using namespace std;     
 
-struct hashes_struct get_hashes(const char* genom) {
+struct hashes_struct get_hashes(const char* genome) {
 	// prepare parameters for calculating hash
-	const unsigned char* to_hash = reinterpret_cast<const unsigned char*>(genom);
+	const unsigned char* to_hash = reinterpret_cast<const unsigned char*>(genome);
 	size_t length = strlen((char*)to_hash);
 	unsigned char* results = new unsigned char[SHA_DIGEST_LENGTH];
 
