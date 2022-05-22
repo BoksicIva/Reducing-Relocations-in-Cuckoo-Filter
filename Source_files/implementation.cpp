@@ -2,12 +2,15 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <numeric>
 #include "../Header_files/hashing.h"
 #include "../Header_files/ReadGenome.h"
 #include "../Header_files/implementation.h"
 #include "../Header_files/CuckooFilter.h"
 
 using namespace std;
+using namespace std::chrono;
 
 vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk) {
 	// read genome
@@ -20,13 +23,21 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	int num_insertions = 0;
 	int num_k_mers = 0;
 
+	// insertion time vector
+	vector<long long> insertion_time_vector;
+
 	for (int i = 0; i < whole_genome.length(); i++) {
 		// take k-mers of size k
 		string k_mer = whole_genome.substr(i, k);
 		num_k_mers++;
 
 		// insert into cuckoo table
+		auto start = high_resolution_clock::now();
 		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk);
+		auto stop = high_resolution_clock::now();
+		auto insertion_time = duration_cast<microseconds>(stop - start).count();
+
+		insertion_time_vector.push_back(insertion_time);
 
 		if (inserted) {
 			num_insertions++;
@@ -36,6 +47,20 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	cout << "Number of k-mers of size " << k  << ": " << num_k_mers << endl;
 	cout << "Number of inserted k-mers:   " << num_insertions << endl;
 	cout << (num_insertions / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
+
+	// average insertion time
+	float average_insertion_time = 0.0;
+
+	if (!insertion_time_vector.empty()) {
+		auto const count = static_cast<float>(insertion_time_vector.size());
+		average_insertion_time = accumulate(insertion_time_vector.begin(), insertion_time_vector.end(), 0.0) / count;
+	}
+	cout << endl;
+	cout << "Average insertion time: " << average_insertion_time << " ms" << endl;
+
+	// load factor
+	float load_factor = float(num_insertions) / (rows * columns);
+	cout << "Load factor: " << load_factor << endl;
 
 	return CuckooTable;
 }
