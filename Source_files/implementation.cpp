@@ -12,15 +12,14 @@
 using namespace std;
 using namespace std::chrono;
 
-vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk,bool reduced) {
+vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk, bool reduced) {
 	// read genome
 	string whole_genome = ReadGenome(filename);
 
 	// create cuckoo table 
 	vector<vector<uint32_t>> CuckooTable = createCuckooTable(rows);
 
-	// number of insertions and number of k-mers
-	int num_insertions = 0;
+	// number of k-mers
 	int num_k_mers = 0;
 
 	// insertion time vector
@@ -36,7 +35,7 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 
 		// insert into cuckoo table
 		auto start = high_resolution_clock::now();
-		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk, reduced,num_reloc,num_insertions);
+		bool inserted = insert(rows, columns, CuckooTable, k_mer.c_str(), mnk, reduced, num_reloc);
 		auto stop = high_resolution_clock::now();
 		auto insertion_time = duration_cast<microseconds>(stop - start).count();
 
@@ -44,9 +43,17 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 
 	}
 
+	// load factor
+	float load_factor = 0.0;
+	for (vector<uint32_t> v : CuckooTable) {
+		for (uint32_t i : v) {
+			load_factor++;
+		}
+	}
+
 	cout << "Number of k-mers of size " << k  << ": " << num_k_mers << endl;
-	cout << "Number of inserted k-mers:   " << num_insertions << endl;
-	cout << (num_insertions*1.0 / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
+	cout << "Number of inserted k-mers:   " << int(load_factor) << endl;
+	cout << (load_factor / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
 
 	// average insertion time
 	float average_insertion_time = 0.0;
@@ -58,9 +65,11 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	cout << endl;
 	cout << "Average insertion time: " << average_insertion_time << " ms" << endl;
 
-	// load factor
-	float load_factor = (num_insertions*1.0) / (rows * columns);
-	cout << "Load factor: " << load_factor << endl;
+	load_factor = load_factor / (rows * columns);
+	cout << "Load factor: " << load_factor * 100 << "%" << endl;
+
+	//float load_factor = (num_insertions*1.0) / (rows * columns);
+	//cout << "Load factor: " << load_factor * 100 << "%" << endl;
 
 	// Number of relocations
 	cout << "Number of relocations: " << num_reloc << endl;
@@ -95,7 +104,7 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 	cout << (num_found / num_of_random_k_mers) * 100 << "% of random k_mers were found." << endl;
 }
 
-void implementation(string filename, int k, int rows, int columns, int mnk, int num_of_random_k_mers,bool reduced) {
+void implementation(string filename, int k, int rows, int columns, int mnk, int num_of_random_k_mers, bool reduced) {
 	// build the cuckoo table
 	vector<vector<uint32_t>> CuckooTable = build_cuckoo_table(k, filename, rows, columns, mnk, reduced);
 

@@ -22,16 +22,16 @@ struct hashes_struct get_hashes(const char* genome) {
 	memcpy(results64, results, 8);
 
 	// dividing 64 bits into h1 and fingerprint
-	unsigned char* h1 = new unsigned char[4];
-	memcpy(h1, results64, 4);
+	Casting castingH1;
+	memcpy(castingH1.char_format, results64, 4);
 
-	unsigned char* fingerprint = new unsigned char[4];
-	memcpy(fingerprint, &results64[4], 4);
+	Casting castingF;
+	memcpy(castingF.char_format, &results64[4], 4);
 
 	// casting h1 and fingerprint to bytes
 	hashes_struct hashes;
-	hashes.h1 = *h1;
-	hashes.fingerprint = *fingerprint;
+	hashes.h1 = castingH1.binary_format;
+	hashes.fingerprint = castingF.binary_format;
 
 	// calculating h2
 	hashes.h2 = hashes.h1 ^ hashes.fingerprint;

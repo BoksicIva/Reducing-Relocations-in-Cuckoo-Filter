@@ -41,7 +41,7 @@ vector<vector<uint32_t>> createCuckooTable(int m) {
 /// /// <param name="CuckooTable">Representation of Cuckoo Table </param>
 /// <param name="genome">Text segment that needs to be stored into Cuckoo Table</param>
 /// <returns>Boolean value if text segment s successfuly stored</returns>
-bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* genome,int MNK, bool reduced,int &num_reloc,int &num_insertions) {
+bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* genome, int MNK, bool reduced, int &num_reloc) {
 	hashes_struct hashes = get_hashes(genome);
 	uint32_t Ex = hashes.fingerprint;
 	uint32_t h1_x = hashes.h1;
@@ -62,8 +62,6 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		
 		
 		if (!full_bucket(bucket1,b) && !full_bucket(bucket2,b)) {
-			num_insertions++;
-
 			if (reduced) {
 				if (count1 <= count2) {
 					insert_in_slot(bucket1, Ex);
@@ -74,17 +72,17 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 			}
 			else {
 				random = rand() % 2;
-				//cout << "Random 0,1" << random;
-				vector<uint32_t> to_bucket = bucket2;
-				if (random == 1) {
-					to_bucket = bucket1;
+
+				if (random == 0) {
+					insert_in_slot(bucket1, Ex);
 				}
-				insert_in_slot(to_bucket, Ex);
+				else {
+					insert_in_slot(bucket2, Ex);
+				}
 			}
 
 		}
 		else if (!full_bucket(bucket1, b) || !full_bucket(bucket2, b)) {
-			num_insertions++;
 
 			if (!full_bucket(bucket1, b)) {
 				insert_in_slot(bucket1, Ex);
@@ -112,7 +110,6 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 				int position = (r ^ Er) % CuckooTable.size();
 				to_bucket = CuckooTable[position];
 				if (!full_bucket(to_bucket, b)) {
-					num_insertions++;
 					insert_in_slot(to_bucket, Er);
 					return true;
 				}
