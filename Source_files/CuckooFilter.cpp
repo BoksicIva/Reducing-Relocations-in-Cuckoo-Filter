@@ -94,7 +94,6 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 		else {
 			// relocation process
 			random = rand() % 2;
-			//cout << "Random2: 0,1" << random;
 			uint32_t r = h2_x;
 			uint32_t Er;
 			vector<uint32_t> kick_from_bucket = bucket2, to_bucket;
@@ -183,7 +182,6 @@ void insert_in_slot(vector<uint32_t>& bucket, uint32_t fp) {
 
 uint32_t kick_from_slot(vector<uint32_t>& bucket, uint32_t Ex) {
 	int r = rand() % bucket.size();
-	//cout << "kick_from_slot"<< r;
 	uint32_t Er = bucket[r];
 	bucket[r] = Ex;
 	return Er;

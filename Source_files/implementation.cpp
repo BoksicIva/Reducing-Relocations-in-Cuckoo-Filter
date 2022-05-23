@@ -13,6 +13,9 @@ using namespace std;
 using namespace std::chrono;
 
 vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk, bool reduced) {
+	// a file for saving results
+	fstream output;
+
 	// read genome
 	string whole_genome = ReadGenome(filename);
 
@@ -51,6 +54,17 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 		}
 	}
 
+	// save output to a file
+	output.open("output.csv", ios::out | ios::app);
+	output << k << ","
+		<< rows << ","
+		<< columns << ","
+		<< mnk << ","
+		<< reduced << ","
+		<< static_cast<int>(load_factor) << "," // number of inserted k-mers
+		<< num_k_mers << "," // number of k-mers of size k
+		<< (load_factor / num_k_mers) * 100 << ","; // % of k_mers that were inserted
+
 	cout << "Number of k-mers of size " << k  << ": " << num_k_mers << endl;
 	cout << "Number of inserted k-mers:   " << int(load_factor) << endl;
 	cout << (load_factor / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
@@ -62,22 +76,30 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 		auto const count = static_cast<float>(insertion_time_vector.size());
 		average_insertion_time = accumulate(insertion_time_vector.begin(), insertion_time_vector.end(), 0.0) / count;
 	}
+
+	output << average_insertion_time << ",";
 	cout << endl;
 	cout << "Average insertion time: " << average_insertion_time << " ms" << endl;
 
 	load_factor = load_factor / (rows * columns);
+	output << load_factor * 100 << ","; // load factor 
 	cout << "Load factor: " << load_factor * 100 << "%" << endl;
 
-	//float load_factor = (num_insertions*1.0) / (rows * columns);
-	//cout << "Load factor: " << load_factor * 100 << "%" << endl;
 
 	// Number of relocations
+	output << num_reloc << "\n";
 	cout << "Number of relocations: " << num_reloc << endl;
+
+
+	output.close();
 
 	return CuckooTable;
 }
 
 void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, vector<vector<uint32_t>> CuckooTable) {
+	// a file for saving results
+	fstream output;
+
 	// read genome
 	string whole_genome = ReadGenome(filename);
 	srand(time(0));
@@ -97,6 +119,15 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 			num_found++;
 		}
 	}
+
+	// save output to a file
+	output.open("output_search.csv", ios::out | ios::app);
+
+	output << k << ","
+		<< num_found << "," // number of found k-mers
+		<< num_of_random_k_mers << ","
+		<< (num_found / num_of_random_k_mers) * 100 // % of random k_mers that were found
+		<< "\n";
 
 	cout << endl;
 	cout << "Number of searched k-mers of size " << k << ": " << num_of_random_k_mers << endl;
