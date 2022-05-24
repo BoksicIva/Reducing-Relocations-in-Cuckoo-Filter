@@ -1,3 +1,5 @@
+#pragma once
+
 #include <openssl/sha.h>
 
 union Casting {
@@ -11,4 +13,4 @@ struct hashes_struct {
 	uint32_t fingerprint;
 };
 
-struct 	hashes_struct get_hashes(const char* genom);
+struct 	hashes_struct get_hashes_impl_2(const char* genom);

@@ -1,0 +1,26 @@
+1.
+sudo apt uldate
+
+2. 
+sudo apt upgrade
+
+3.
+sudo apt-get install libssl-dev
+
+4.
+Pozicionirati se u folder Reducing-Relocaitons-in-Cuckoo-Filter
+(npr. cd /mnt/c/Users/Karolina/Desktop/BIOINF/BIOINF/Reducing-Relocations-in-Cuckoo-Filter)
+
+5.
+g++ -g -o CuckooFilter.o -c ./Source_files/CuckooFilter.cpp
+
+g++ -g -o ReadGenome.o -c ./Source_files/ReadGenome.cpp
+
+g++ -g -o implementation.o -c ./Source_files/implementation.cpp
+
+g++ -g -o main.o -c ./Source_files/main.cpp
+
+g++ -g ./Source_files/main.cpp ./Source_files/implementation.cpp  ./Source_files/ReadGenome.cpp ./Source_files/CuckooFilter.cpp  -o main -lcrypto -lssl
+
+6. 
+./main 100 50000 100 100 5000000 true ./Resource_files/genome.fna

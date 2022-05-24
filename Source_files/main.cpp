@@ -26,8 +26,10 @@ int main(int argc, char* argv[]) {
 	int num_of_random_k_mers = atoi(argv[5]);
 	bool reduced = bool(argv[6]);
 	string filename = argv[7];
-
+	
 	implementation(filename, k, rows, columns, mnk, num_of_random_k_mers, reduced);
+
+	cout << "Done!" << endl;
 		 
 	return 0;
 }

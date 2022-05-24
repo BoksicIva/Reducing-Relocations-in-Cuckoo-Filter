@@ -4,7 +4,6 @@
 #include <vector>
 #include <chrono>
 #include <numeric>
-#include "../Header_files/hashing.h"
 #include "../Header_files/ReadGenome.h"
 #include "../Header_files/implementation.h"
 #include "../Header_files/CuckooFilter.h"
@@ -65,9 +64,9 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 		<< num_k_mers << "," // number of k-mers of size k
 		<< (load_factor / num_k_mers) * 100 << ","; // % of k_mers that were inserted
 
-	cout << "Number of k-mers of size " << k  << ": " << num_k_mers << endl;
-	cout << "Number of inserted k-mers:   " << int(load_factor) << endl;
-	cout << (load_factor / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
+	//cout << "Number of k-mers of size " << k  << ": " << num_k_mers << endl;
+	//cout << "Number of inserted k-mers:   " << int(load_factor) << endl;
+	//cout << (load_factor / num_k_mers) * 100 << "% of k_mers were inserted." << endl;
 
 	// average insertion time
 	float average_insertion_time = 0.0;
@@ -78,17 +77,17 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	}
 
 	output << average_insertion_time << ",";
-	cout << endl;
-	cout << "Average insertion time: " << average_insertion_time << " ms" << endl;
+	//cout << endl;
+	//cout << "Average insertion time: " << average_insertion_time << " ms" << endl;
 
 	load_factor = load_factor / (rows * columns);
 	output << load_factor * 100 << ","; // load factor 
-	cout << "Load factor: " << load_factor * 100 << "%" << endl;
+	//cout << "Load factor: " << load_factor * 100 << "%" << endl;
 
 
 	// Number of relocations
 	output << num_reloc << "\n";
-	cout << "Number of relocations: " << num_reloc << endl;
+	//cout << "Number of relocations: " << num_reloc << endl;
 
 
 	output.close();
@@ -129,10 +128,10 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 		<< ((num_found*1.0) / num_of_random_k_mers) * 100 // % of random k_mers that were found
 		<< "\n";
 
-	cout << endl;
-	cout << "Number of searched k-mers of size " << k << ": " << num_of_random_k_mers << endl;
-	cout << "Number of found k-mers:               " << num_found << endl;
-	cout << (num_found / num_of_random_k_mers) * 100 << "% of random k_mers were found." << endl;
+	//cout << endl;
+	//cout << "Number of searched k-mers of size " << k << ": " << num_of_random_k_mers << endl;
+	//cout << "Number of found k-mers:               " << num_found << endl;
+	//cout << (num_found / num_of_random_k_mers) * 100 << "% of random k_mers were found." << endl;
 }
 
 void implementation(string filename, int k, int rows, int columns, int mnk, int num_of_random_k_mers, bool reduced) {
