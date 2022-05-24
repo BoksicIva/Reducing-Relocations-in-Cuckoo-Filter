@@ -1,7 +1,7 @@
 # Reducing-Relocations-in-Cuckoo-Filter
 
 
-• Course page link
+• Course page link;
 https://www.fer.unizg.hr/predmet/bio1 
 
 • Wang et al. 2019. The Power of Better Choice: Reducing Relocations in Cuckoo Filter;
