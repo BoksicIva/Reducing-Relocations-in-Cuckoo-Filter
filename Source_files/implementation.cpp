@@ -126,7 +126,7 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 	output << k << ","
 		<< num_found << "," // number of found k-mers
 		<< num_of_random_k_mers << ","
-		<< (num_found / num_of_random_k_mers) * 100 // % of random k_mers that were found
+		<< ((num_found*1.0) / num_of_random_k_mers) * 100 // % of random k_mers that were found
 		<< "\n";
 
 	cout << endl;
