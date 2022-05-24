@@ -4,6 +4,7 @@
 
 using namespace std;
 
+/// By: Karolina Mirkovic
 void sha1_example() {
     // prepare parameters for calculating hash
     const unsigned char* to_hash = reinterpret_cast<const unsigned char*>("ACTGGGTCCAA");

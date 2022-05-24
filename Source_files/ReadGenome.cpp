@@ -5,6 +5,7 @@
 
 using namespace std;
 
+/// By: Karolina Mirkovic
 string ReadGenome(string filename) {
 	// read genome
 	string whole_genome;

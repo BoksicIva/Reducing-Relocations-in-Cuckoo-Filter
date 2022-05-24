@@ -9,6 +9,7 @@
 #include <openssl/sha.h>
 using namespace std;
 
+/// By: Karolina Mirkovic
 struct hashes_struct get_hashes_impl_2(const char* genome) {
 	// prepare parameters for calculating hash
 	const unsigned char* to_hash = reinterpret_cast<const unsigned char*>(genome);
@@ -45,7 +46,7 @@ struct hashes_struct get_hashes_impl_2(const char* genome) {
 /// Funtion creates Cuckoo table as 2D vector of “m” rows and “b” columns of uint32_t type.
 /// Table is used for storing segments "fingerprints" that are results of hashinf funtion.
 /// 
-/// By: Iva Bokšić
+/// By: Iva Boksic
 /// </summary>
 /// <param name="m">The number of buckets in the Cuckoo filter </param>
 /// <param name="b"> the number of entries in each bucket </param>
@@ -70,7 +71,7 @@ vector<vector<uint32_t>> createCuckooTable(int m) {
 ///       element by randomly selecting and kicking out a fingerprint 
 ///       stored in either bucket.
 /// 
-/// By: Iva Bokšić
+/// By: Iva Boksic
 /// </summary>
 /// /// <param name="CuckooTable">Representation of Cuckoo Table </param>
 /// <param name="genome">Text segment that needs to be stored into Cuckoo Table</param>
@@ -164,6 +165,7 @@ bool insert(int m, int b,vector<vector<uint32_t>> &CuckooTable, const char* geno
 }
 
 
+/// By: Iva Boksic
 bool search(vector<vector<uint32_t>>& CuckooTable,const char* genome) {
 	hashes_struct hashes = get_hashes_impl_2(genome);
 	uint32_t Ex = hashes.fingerprint;
@@ -190,7 +192,7 @@ bool search(vector<vector<uint32_t>>& CuckooTable,const char* genome) {
 
 }
 
-
+/// By: Iva Boksic
 bool duplicateFilters(vector<uint32_t>& bucket1, vector<uint32_t>& bucket2,uint32_t Ex) {
 
 	for (uint32_t fp : bucket1) {
@@ -206,14 +208,17 @@ bool duplicateFilters(vector<uint32_t>& bucket1, vector<uint32_t>& bucket2,uint3
 	return false;
 }
 
+/// By: Iva Boksic
 int fingerCount(vector<uint32_t>& bucket) {
 	return (int)bucket.size();
 }
 
+/// By: Iva Boksic
 void insert_in_slot(vector<uint32_t>& bucket, uint32_t fp) {
 	bucket.insert(bucket.begin() + bucket.size(), fp);
 }
 
+/// By: Iva Boksic
 uint32_t kick_from_slot(vector<uint32_t>& bucket, uint32_t Ex) {
 	int r = rand() % bucket.size();
 	uint32_t Er = bucket[r];
@@ -221,7 +226,7 @@ uint32_t kick_from_slot(vector<uint32_t>& bucket, uint32_t Ex) {
 	return Er;
 }
 
-
+/// By: Iva Boksic
 bool full_bucket(vector<uint32_t>& bucket,int b) {
 	return bucket.size() == b;
 }

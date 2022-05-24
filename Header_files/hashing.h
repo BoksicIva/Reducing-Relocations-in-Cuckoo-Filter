@@ -2,6 +2,8 @@
 
 #include <openssl/sha.h>
 
+/// By: Karolina Mirkovic
+
 union Casting {
 	uint32_t binary_format;
 	unsigned char char_format[SHA_DIGEST_LENGTH];
