@@ -7,6 +7,7 @@
 
 using namespace std;
 
+/// By: Iva Boksic
 
 vector<vector<uint32_t>> createCuckooTable(int m);
 

@@ -11,6 +11,7 @@
 using namespace std;
 using namespace std::chrono;
 
+/// By: Karolina Mirkovic
 vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, int columns, int mnk, bool reduced) {
 	// a file for saving results
 	fstream output;
@@ -95,6 +96,7 @@ vector<vector<uint32_t>> build_cuckoo_table(int k, string filename, int rows, in
 	return CuckooTable;
 }
 
+/// By: Karolina Mirkovic
 void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, vector<vector<uint32_t>> CuckooTable) {
 	// a file for saving results
 	fstream output;
@@ -134,6 +136,7 @@ void search_for_random_k_mers(int k, int num_of_random_k_mers, string filename, 
 	//cout << (num_found / num_of_random_k_mers) * 100 << "% of random k_mers were found." << endl;
 }
 
+/// By: Karolina Mirkovic
 void implementation(string filename, int k, int rows, int columns, int mnk, int num_of_random_k_mers, bool reduced) {
 	// build the cuckoo table
 	vector<vector<uint32_t>> CuckooTable = build_cuckoo_table(k, filename, rows, columns, mnk, reduced);

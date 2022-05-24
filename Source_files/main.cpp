@@ -5,6 +5,7 @@
 
 using namespace std;
 
+/// By: Karolina Mirkovic
 int main(int argc, char* argv[]) {
 	/*int k = 100;
 	int rows = 50000;
